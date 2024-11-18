@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -42,7 +43,9 @@ public class DefaultWireClient<T> implements InvocationHandler {
 
                 // TODO 换成NETTY
                 HttpRequest post = HttpRequest.post(value + path[0]);
-                HttpResponse execute = post.body(JSONUtil.toJsonStr(args[0]))
+                String jsonStr = JSONUtil.toJsonStr(args[0]);
+                HttpResponse execute = post.body(jsonStr)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .execute();
                 return execute.body();
             }
